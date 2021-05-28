@@ -1,13 +1,13 @@
 <div align="center">
 <p align="center">
-  <a href="https://github.com/losuler/pihole-dnscrypt-docker">
+  <a href="https://github.com/pfurio/pihole-dnscrypt-docker">
     <img src="img/logo.png" alt="logo" width="150" height="150">
   </a>
 
   <p align="center">
     <h3 align="center">Pi-hole DNSCrypt Docker</h3>
     <p align="center">
-      A docker-compose for Pi-hole and DNSCrypt, daemonized with a systemd service file.
+      A docker-compose for Pi-hole and DNSCrypt ready to work on a Synology NAS server.
     </p>
   </p>
 </p>
@@ -30,8 +30,6 @@ docker-compose
 - [Configuration](#configuration)
 - [Installation](#installation)
 - [Updating images](#updating-images)
-- [Viewing logs](#viewing-logs)
-- [Testing](#testing)
 
 ## Configuration
 
@@ -55,35 +53,21 @@ Edit `etc-dnscrypt-proxy/dnscrypt-proxy.toml` to your preference.
 
 ## Installation
 
-1. Clone this repository to a directory of your choice.
+1. Clone this repository in /volume1/docker/pihole-dnscrypt/ inside your NAS.
 
     ```
-    git clone https://gitlab.com/losuler/pihole-dnscrypt-docker
-    ```
-    
-2. Edit `pihole-dnscrypt-docker.service` to point to the directory of the cloned repository.
-
-    ```
-    WorkingDirectory=/path/to/pihole-dnscrypt-docker
+    git clone https://github.com/pfurio/pihole-dnscrypt-docker
     ```
 
-3. Copy the systemd service file.
+2. Create missing directories:
+  ```
+    mkdir /volume1/docker/pihole-dnscrypt/etc-pihole/
+    mkdir /volume1/docker/pihole-dnscrypt/etc-dnsmasq.d/
+  ```
 
-    ```
-    sudo cp pihole-dnscrypt-docker.service /etc/systemd/system/
-    ```
+3. Copy docker-compose.yml file as a new Portainer stack and deploy.
 
-4. Reload the systemd manager configuration.
-
-    ```
-    sudo systemctl daemon-reload
-    ```
-
-5. Enable and start the systemd service.
-
-    ```
-    sudo systemctl enable --now pihole-dnscrypt-docker
-    ```
+4. Change router DNS server to point to your NAS server.
 
 ## Updating images
 
@@ -109,26 +93,4 @@ Remove old/unused images.
 
 ```
 sudo docker image prune
-```
-
-## Viewing logs
-
-To view the status of the service.
-
-```
-sudo systemctl status pihole-dnscrypt-docker
-```
-
-To view the entire log (append `-f` to view a live feed of the logs).
-
-```
-sudo journalctl -u pihole-dnscrypt-docker
-```
-
-## Testing
-
-To test the running of the docker-compose before running the service.
-
-```
-sudo docker-compose up --force-recreate
 ```
